@@ -1,0 +1,11 @@
+#### axios创建实例对象 发送AJAX请求
+
+const xxx = axios.create({
+
+配置
+
+})
+
+![code](C:\Users\G1330\Desktop\code.png)
+
+![image-20230606094233312](C:\Users\G1330\AppData\Roaming\Typora\typora-user-images\image-20230606094233312.png)

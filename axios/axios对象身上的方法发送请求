@@ -1,0 +1,47 @@
+#### axios对象身上的方法发送请求
+
+比如 axios.request({})  axios.post({})
+
+
+
+```javascript
+
+<h3>基本使用</h3>
+    <hr>
+    <button class="btn1">发送GET请求</button>
+    <button class="btn2">发送POST请求</button>
+    <button class="btn3">发送PUT请求</button>
+    <button class="btn4">发送DELETE请求</button>
+
+
+    <script type="text/javascript">
+        // 获取按钮
+        const btns = document.querySelectorAll('button')
+        //发送get请求
+        btns[0].addEventListener('click', function () {
+            // 使用方式
+            axios.request({
+                method: 'GET',
+                url: 'http://localhost:3000/comments'
+            }).then((result) => {
+                console.log(result);
+            })
+        })
+
+
+        //发送POST请求
+        btns[1].addEventListener('click', function () {
+            // 使用方式
+            axios.post(
+                'http://localhost:3000/comments',
+                {
+                    "body": "喜大普奔",
+                    "postId": "2",
+                }
+            ).then((result)=>{
+                console.log(result)
+            })
+        })
+
+```
+

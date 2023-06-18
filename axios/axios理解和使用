@@ -1,0 +1,40 @@
+#### axios概念
+
+Axios是一个基于Promise的HTTP客户端，可以用于浏览器和Node.js环境中。它支持浏览器和Node.js中的XMLHttpRequest和fetch API,并提供了一些高级特性，如拦截请求和响应、自动转换JSON数据、取消请求等。Axios可以轻松地集成到现有的应用程序中，使开发者能够更方便地处理HTTP请求。
+
+#### axios特点
+
+1.可以发送 AJAX请求
+
+2.可以在node.js当中发送http请求
+
+3.支持promise API
+
+4.请求响应拦截器 
+
+5.可以帮我们对请求和响应数据做转换
+
+6.取消请求
+
+7.自动将结果转化为json数据
+
+
+
+#### axios安装
+
+项目当中：$ npm install axios /  $ yarm  add  axios
+
+直接引入axios      
+
+<script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
