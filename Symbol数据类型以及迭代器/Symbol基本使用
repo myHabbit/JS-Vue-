@@ -1,0 +1,21 @@
+### Symbol数据类型
+
+​    ES6引入了一种新的原始数类型 Symbol 表示独一无二的值，它是js语言的第七种数据类型，是一种类似字符串的数据类型
+
+####   特点
+
+ 1.symbol 的值是独一无二的  用来解决命名冲突的问题
+
+2.Symbol值不能与其他数据进行运算
+
+3.Symbol定义的对象属性 不能使用for...in循环遍历 但是可以使用Reflect.ownKeys来获取对象的所有键名
+
+
+
+##### Symbol内置属性
+
+  除了定义自己使用的Symbol值以外，ES6还提供了11个内置的Symbol值 指向语言内部使用的方法
+
+ ![image-20230529104217716](C:\Users\G1330\AppData\Roaming\Typora\typora-user-images\image-20230529104217716.png)
+
+![image-20230529104237447](C:\Users\G1330\AppData\Roaming\Typora\typora-user-images\image-20230529104237447.png)
