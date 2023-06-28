@@ -1,8 +1,17 @@
-### express下载
+# express介绍
 
+```js
+express 是一个基于node.js平台的极简 灵活的web应用开发框架，
+简单来说  express是一个封装好的工具包 封装了很多功能，便于我们开发web应用（http服务）
+```
+
+# express下载
+
+```javascript
 npm init
 
 npm i express
+```
 
 # Express路由
 
@@ -146,6 +155,15 @@ res.sendFile(__dirname + '/home.html') //响应文件内容
 });
 ```
 
+## express相应设置
+
+```js
+res.redirect('http://atguigu.com')  重定向
+res.download('./package.json')      下载响应
+res.json()   响应json
+res.sendFile(__dirname+'/home.html')  响应文件内容
+```
+
 ## 
 
 # Express中间件
@@ -280,7 +298,7 @@ router.get('/test', function(req, res, next) {
 
 模板引擎是分离 **用户界面**和**业务数据** (h5和服务端js)的一种技术
 
-### 简单使用
+## 简单使用
 
 1. 下载安装
 
@@ -311,3 +329,20 @@ router.get('/test', function(req, res, next) {
 输出非转义数据到模板
 
 `<%- code %>`
+
+
+
+####
+
+# cookie的介绍
+
+```js
+cookie 是HTTP服务器发送到用户浏览器并保存在本地的一小块数据
+cookie 是保存在浏览器端的一小块数据
+cookie 是按照域名划分保存的
+```
+
+
+
+
+

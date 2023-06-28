@@ -424,3 +424,94 @@ require 使用的一些注意事项：
 > 5. 缓存模块的值
 > 6. 返回 module.exports 的值![daoru](./daoru.png)
 
+## CommonJS模块化规范
+
+```js
+module.exports 和 exports 以及 require 都是commonjs模块化规范中的内容
+而node.js是实现了commonjs模块化规范，二者关系有点像javascr和ECMAscript
+```
+
+
+
+# 包管理工具
+
+###  什么是包
+
+```js
+英文单词是package,代表了一组特定功能的源码集合
+```
+
+## 包管理工具
+
+```js
+管理包的应用软件，可以对包进行 下载安装 更新 删除 上传等操作
+```
+
+## 常用的包管理工具
+
+```js
+npm
+yarn
+cnpm
+```
+
+## npm
+
+```js
+npm 全称 node package Manage    Node的包管理工具
+```
+
+## 安装包依赖
+
+```js
+npm i 
+npm install
+
+
+安装指定版本的
+npm i @版本号
+
+```
+
+## 删除依赖
+
+```js
+局部删除
+npm remove uniq
+npm r uniq
+
+全局卸载
+npm remove -g nodemon
+```
+
+## cnpm
+
+```js
+cnpm 是一个淘宝构建的npmjs.com的完整镜像 也称为淘宝镜像   
+```
+
+## cnpm安装
+
+```
+npm install -g  cnpm --registry=http://registry.npmirror.com
+```
+
+## yarn
+
+```js
+yarn 是Facebook在2016年推出的新的包管理工具
+```
+
+## yarn特点
+
+```js
+速度超快
+超级安全
+超级可靠
+```
+
+## yarn安装
+
+```js
+npm i yarn
+```
