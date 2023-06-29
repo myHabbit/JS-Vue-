@@ -1,3 +1,299 @@
+# 初识Vue
+
+1.导入vue.js的script脚本文件
+
+2.在页面中声明一个将要被vue所控制的DOM区域
+
+3.创建vm实例对象(vue实例对象)
+
+```js
+  <div id="app">
+        <h1>你好 {{username}}</h1>
+    </div>
+    <script type="text/javascript">
+
+
+        // 创建vue实例
+        const vm = new Vue({
+            el:'#app',  //el用于指定当前Vue实例为那个容器服务，值通常为css的id选择器字符串
+            data:{
+                username:'安鑫'
+            },
+            methods:{}
+        })
+    </script>
+```
+
+# 模板语法
+
+## 差值语法
+
+```js
+ <div id="app">
+        <!-- {{}}为插值语法  功能：用于解析标签体内容 -->
+        <h2>{{username}}</h2>
+    </div>
+
+
+    <script>
+        const vm = new Vue({
+            el:'#app',
+            data:{
+                username:'安鑫'
+            }
+        })
+```
+
+## 指令语法
+
+```js
+    <div id="app">
+        <!-- v-bind 指令 可以给任何属性动态绑定值 v-bind:可以简写为: -->
+        <!-- v-bind 指令 用于解析标签（包括：标签属性 标签体内容 绑定事件...） -->
+        <a v-bind:href="url">跳转</a>
+    </div>
+
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                username: '安鑫',
+                url: 'https://baidu.com'
+            }
+        })
+    </script>
+```
+
+# 数据绑定
+
+## 单向数据绑定v-bind
+
+v-bind:数据只能从data流向页面
+
+```js
+  <div id="app">
+        <!-- v-bind为单向数据绑定 -->
+        单项数据绑定:<input type="text" v-bind:value="name">
+    </div>
+
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                name: '安鑫1234'
+            },
+            methods: {}
+        })
+    </script>
+```
+
+## 双向数据绑定v-model
+
+v-model:数据不仅能从data流向页面，还可以从页面流向data
+
+```js
+ <div id="app">
+        <!-- v-model 为双向数据指令 -->
+         <!-- 由于v-model 默认收集的就是value值 所以v-model.value可以简写为v-model: -->
+        双向数据绑定:<input type="text" v-model:value="name">
+    </div>
+
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                name: '安鑫'
+            },
+            methods: {}
+        })
+    </script>
+```
+
+注意：v-model只能应用于表单类元素（输入类元素）上
+
+因为v-model默认收集的就是value值
+
+# el与data的两种写法
+
+## el的两种写法
+
+```js
+  <div id="app">
+        <h2>你好 {{username}}</h2>
+    </div>
+
+
+    <script>
+
+
+        // el的两种写法
+        const vm = new Vue({
+            // el:'#app',   //第一种写法  
+            data:{
+                username:'Vue'
+            }
+        })
+        console.log(vm)
+        vm.$mount('#app') //第二种写法
+    </script>
+```
+
+## data的两种写法
+
+```js
+<div id="app">
+        <h2>你好 {{username}}</h2>
+    </div>
+
+
+    <script>
+
+
+            const vm = new Vue({
+            // el:'#app',
+            // // data的第一种写法：对象式
+            // data:{
+            //     username:'安鑫'
+            // }
+
+
+            el:'#app',
+            // data的第二种写法：函数式
+           data:function(){
+            console.log('===',this)   //此处的this是Vue实例 
+            return{
+                username:'安鑫'
+            }
+           }
+        })
+    </script>
+注意 由vue管理的函数，一定不要写箭头函数，一旦写了箭头函数 this就不再是vue实例了
+```
+
+# 数据代理
+
+## object.defineproperty方法
+
+```js
+<script>
+        let number = 18
+        let person = {
+            name: '张三',
+            age: '18'
+        }
+        // 给person对象里面添加一个sex属性 值为男
+        Object.defineProperty(person, 'sex', {
+            // value: '男',
+            // enumerable: true, //控制属性是否可以枚举   默认是false
+            // writable: true,    //控制属性是否可以被修改  默认是false
+            // configurable: true   //控制属性是否可以被删除  默认是false
+
+
+            // 当有人读取person的age属性时，get函数就会被调用 且返回值就是age的值
+            get() {
+                return number
+            },
+
+
+            // 当有人修改person的age属性时，get函数就会被调用 且会收到修改的具体值
+            set() {
+                console.log('有人修改了person的age值 其值是',value)
+                number = value
+
+
+            }
+        })
+
+
+        // console.log(Object.keys(person));
+        console.log(person);
+    </script>
+```
+
+### vue中的数据代理
+
+![img](https://uploader.shimo.im/f/KtFPcGZ7RwyogBVF.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDMzMDYsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzAwNiwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0.6DS52IsUzlyC1pw4roVj9KoGKYrqXcHcC5SFw6Tp3m4)
+
+# 事件对象
+
+## 基本用法
+
+```js
+    <div id="app">
+        <h2>欢迎来到{{name}}学习</h2>
+        <button v-on:click="showInfo">点我提示信息</button>
+        <!-- 简写形式 -->
+        <button @click="showInfo2(66,$event)">点我提示信息(传参)</button>
+    </div>
+    <script>
+
+
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                name: '尚硅谷'
+            },
+            methods: {
+                showInfo(e) {
+                    //    console.log(e.target.innerText)
+                    // console.log(this)   //此处的this为vm
+                    alert('你好')
+                },
+    
+                showInfo2(number,e) {
+                    console.log(e.target.innerText)
+                    // console.log(this)   //此处的this为vm
+                    alert('你好2')
+                    console.log(number)
+                },
+            }
+        })
+    </script>
+```
+
+vue提供了 v-on事件绑定指令 用来辅助程序员为DOM元素绑定监听事件 语法格式如下:
+
+![img](https://uploader.shimo.im/f/uaaiBKXTgpsskNHC.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDMzMDYsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzAwNiwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0.6DS52IsUzlyC1pw4roVj9KoGKYrqXcHcC5SFw6Tp3m4)
+
+### 通过v-on绑定的事件
+
+ 需要在methods节点中进行声明
+
+<img src="https://uploader.shimo.im/f/VMTHMNqTyWIeRXPi.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDMzMDYsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzAwNiwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0.6DS52IsUzlyC1pw4roVj9KoGKYrqXcHcC5SFw6Tp3m4" alt="img" style="zoom:50%;" />
+
+### v-on指令的简写形式
+
+由于v-on指令在开发中使用频率非常的高 因此 vue官方为其提供了简写形式 简写为(英文的@)
+
+<img src="https://uploader.shimo.im/f/irCLE5CIfoJP9LuA.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDMzMDYsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzAwNiwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0.6DS52IsUzlyC1pw4roVj9KoGKYrqXcHcC5SFw6Tp3m4" alt="img" style="zoom:50%;" />
+
+### 事件对象event
+
+在原生的DOM事件绑定中 可以在处理事务的形参处 接收事件对象event，同理，在v-on指令中（简写为@）,所绑定的事件处理函数中，同样可以接收到事件对象event
+
+<img src="https://uploader.shimo.im/f/o1rpAqKmRpwoK02e.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDMzMDYsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzAwNiwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0.6DS52IsUzlyC1pw4roVj9KoGKYrqXcHcC5SFw6Tp3m4" alt="img" style="zoom:50%;" />
+
+ 
+
+### 绑定事件并传参
+
+在使用v-on指令绑定事件时，可以使用()进行传参
+
+<img src="https://uploader.shimo.im/f/VDOsadSYkqwfWQzu.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDMzMDYsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzAwNiwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0.6DS52IsUzlyC1pw4roVj9KoGKYrqXcHcC5SFw6Tp3m4" alt="img" style="zoom:50%;" />
+
+ 
+
+### $event
+
+$event是vue提供的特殊变量，用来表示原生的事件参数对象event,$event可以解决事件参数对象event 被覆盖的的问题
+
+ 
+
+<img src="https://uploader.shimo.im/f/h3BxGrypsMFqRovU.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDMzMDYsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzAwNiwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0.6DS52IsUzlyC1pw4roVj9KoGKYrqXcHcC5SFw6Tp3m4" alt="img" style="zoom:50%;" />
+
 # 事件
 
 1.使用v-on:xxx 或 @xxx 绑定事件，其中xxx是事件名；
@@ -343,9 +639,10 @@ v-for指令:
 ## key的内部原理
 
 1. 虚拟DOM中key的作用：
+
 										    key是虚拟DOM对象的标识，当数据发生变化时，Vue会根据【新数据】生成【新的虚拟DOM】, 
 			随后Vue进行【新虚拟DOM】与【旧虚拟DOM】的差异比较，比较规则如下：
-	
+
 2. 对比规则：
 
       (1).旧虚拟DOM中找到了与新虚拟DOM相同的key：
@@ -706,3 +1003,20 @@ new Vue({							new Vue({
 		})
 ```
 
+# 过渡与动画
+
+## 过渡与动画
+
+![img](https://uploader.shimo.im/f/neKXltyrALGLujDO.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDM1OTgsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzI5OCwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0._5NeUUkT_xwe2pske9K_vtA75EY44TaCzAGPxQtf_Gc)
+
+![img](https://uploader.shimo.im/f/J0za5c3vBWefVbzO.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDM1OTgsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzI5OCwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0._5NeUUkT_xwe2pske9K_vtA75EY44TaCzAGPxQtf_Gc)
+
+![img](https://uploader.shimo.im/f/dcrnqjXm3xHVvjPD.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDM1OTgsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzI5OCwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0._5NeUUkT_xwe2pske9K_vtA75EY44TaCzAGPxQtf_Gc)
+
+## 多个元素过渡
+
+![img](https://uploader.shimo.im/f/dcrnqjXm3xHVvjPD.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDM1OTgsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzI5OCwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0._5NeUUkT_xwe2pske9K_vtA75EY44TaCzAGPxQtf_Gc)
+
+## 集成第三方的动画
+
+利用npm官网里的   animate.css库
