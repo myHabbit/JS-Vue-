@@ -215,7 +215,7 @@ v-model:数据不仅能从data流向页面，还可以从页面流向data
 
 ### vue中的数据代理
 
-![img](https://uploader.shimo.im/f/KtFPcGZ7RwyogBVF.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDMzMDYsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzAwNiwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0.6DS52IsUzlyC1pw4roVj9KoGKYrqXcHcC5SFw6Tp3m4)
+
 
 # 事件对象
 
@@ -256,43 +256,25 @@ v-model:数据不仅能从data流向页面，还可以从页面流向data
 
 vue提供了 v-on事件绑定指令 用来辅助程序员为DOM元素绑定监听事件 语法格式如下:
 
-![img](https://uploader.shimo.im/f/uaaiBKXTgpsskNHC.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDMzMDYsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzAwNiwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0.6DS52IsUzlyC1pw4roVj9KoGKYrqXcHcC5SFw6Tp3m4)
-
 ### 通过v-on绑定的事件
 
  需要在methods节点中进行声明
-
-<img src="https://uploader.shimo.im/f/VMTHMNqTyWIeRXPi.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDMzMDYsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzAwNiwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0.6DS52IsUzlyC1pw4roVj9KoGKYrqXcHcC5SFw6Tp3m4" alt="img" style="zoom:50%;" />
 
 ### v-on指令的简写形式
 
 由于v-on指令在开发中使用频率非常的高 因此 vue官方为其提供了简写形式 简写为(英文的@)
 
-<img src="https://uploader.shimo.im/f/irCLE5CIfoJP9LuA.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDMzMDYsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzAwNiwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0.6DS52IsUzlyC1pw4roVj9KoGKYrqXcHcC5SFw6Tp3m4" alt="img" style="zoom:50%;" />
-
 ### 事件对象event
 
 在原生的DOM事件绑定中 可以在处理事务的形参处 接收事件对象event，同理，在v-on指令中（简写为@）,所绑定的事件处理函数中，同样可以接收到事件对象event
-
-<img src="https://uploader.shimo.im/f/o1rpAqKmRpwoK02e.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDMzMDYsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzAwNiwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0.6DS52IsUzlyC1pw4roVj9KoGKYrqXcHcC5SFw6Tp3m4" alt="img" style="zoom:50%;" />
-
- 
 
 ### 绑定事件并传参
 
 在使用v-on指令绑定事件时，可以使用()进行传参
 
-<img src="https://uploader.shimo.im/f/VDOsadSYkqwfWQzu.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDMzMDYsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzAwNiwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0.6DS52IsUzlyC1pw4roVj9KoGKYrqXcHcC5SFw6Tp3m4" alt="img" style="zoom:50%;" />
-
- 
-
 ### $event
 
 $event是vue提供的特殊变量，用来表示原生的事件参数对象event,$event可以解决事件参数对象event 被覆盖的的问题
-
- 
-
-<img src="https://uploader.shimo.im/f/h3BxGrypsMFqRovU.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDMzMDYsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzAwNiwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0.6DS52IsUzlyC1pw4roVj9KoGKYrqXcHcC5SFw6Tp3m4" alt="img" style="zoom:50%;" />
 
 # 事件
 
@@ -1002,21 +984,3 @@ new Vue({							new Vue({
 			},
 		})
 ```
-
-# 过渡与动画
-
-## 过渡与动画
-
-![img](https://uploader.shimo.im/f/neKXltyrALGLujDO.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDM1OTgsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzI5OCwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0._5NeUUkT_xwe2pske9K_vtA75EY44TaCzAGPxQtf_Gc)
-
-![img](https://uploader.shimo.im/f/J0za5c3vBWefVbzO.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDM1OTgsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzI5OCwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0._5NeUUkT_xwe2pske9K_vtA75EY44TaCzAGPxQtf_Gc)
-
-![img](https://uploader.shimo.im/f/dcrnqjXm3xHVvjPD.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDM1OTgsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzI5OCwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0._5NeUUkT_xwe2pske9K_vtA75EY44TaCzAGPxQtf_Gc)
-
-## 多个元素过渡
-
-![img](https://uploader.shimo.im/f/dcrnqjXm3xHVvjPD.png!thumbnail?accessToken=eyJhbGciOiJIUzI1NiIsImtpZCI6ImRlZmF1bHQiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE2ODgwMDM1OTgsImZpbGVHVUlEIjoiOE5rNmVPWVI1clNSSlBxTCIsImlhdCI6MTY4ODAwMzI5OCwiaXNzIjoidXBsb2FkZXJfYWNjZXNzX3Jlc291cmNlIiwidXNlcklkIjo2MDEwNDA3MH0._5NeUUkT_xwe2pske9K_vtA75EY44TaCzAGPxQtf_Gc)
-
-## 集成第三方的动画
-
-利用npm官网里的   animate.css库
