@@ -66,3 +66,32 @@ export default function App() {
 }
 ```
 
+## CSS_Module
+
+相当于模块化css
+
+```js
+import React from 'react'
+import classes from './App.module.css'
+
+export default function App() {
+  /* 
+     CSS模块使用步骤
+        第一步： 创建一个xxx.module.css
+        第二步：  在组件中引入css import classes from './App.module.css'
+        第三步：通过classes来设置类
+         className={classes.p1}
+      
+    CSS模块可以动态设置 唯一的class
+  */
+
+  return (
+    <div>
+      <p className={classes.p1}>我是第一个段落</p>
+      <button>点我一下</button>
+    </div>
+  )
+}
+
+```
+
