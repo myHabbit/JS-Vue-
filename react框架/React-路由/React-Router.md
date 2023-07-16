@@ -1,5 +1,36 @@
 ## 1.概述
 
+###   1.1. SPA    的理解  
+
+1. 单页Web应用（single page web application，SPA）。
+2. 整个应用只有  一个完整的页面  。
+3. 点击页面中的链接  不会刷新  页面，只会做页面的  局部更新。  
+4. 数据都需要通过ajax请求获取, 并在前端异步展现。
+
+###   1.2.     路由的理解  
+
+**1.**   什么是路由    ?  
+
+1. 一个路由就是一个映射关系(key:value)
+2. key为路径, value可能是function或component
+
+**2.**   路由分类  
+
+1. 后端路由：
+2. 理解： value是function, 用来处理客户端提交的请求。
+3. 注册路由： router.get(path, function(req, res))
+4. 工作过程：当node接收到一个请求时, 根据请求路径找到匹配的路由, 调用路由中的函数来处理请求, 返回响应数据
+5. 前端路由：
+6. 浏览器端路由，value是component，用于展示页面内容。
+7. 注册路由: <Route path="/test" component={Test}>
+8. 工作过程：当浏览器的path变为/test时, 当前路由组件就会变为Test组件
+
+### 1.3. react-router    -dom的理解  
+
+1. react的一个插件库。
+2. 专门用来实现一个SPA应用。
+3. 基于react的项目基本都会用到此库。
+
 官方文档：[Home v6.4.1 | React Routeropen in new window](https://reactrouter.com/en/main)React Router 以三个不同的包发布到 npm 上，它们分别为：
 
 1. 1. react-router: 路由的核心库，提供了很多的：组件、钩子。
@@ -24,7 +55,147 @@
 npm install react-router-dom@6
 ```
 
-## 2.BrowserRouter和HashRouter
+### 1.4、路由的基本使用
+```js
+		1.明确好界面中的导航区、展示区
+		2.导航区的a标签改为Link标签
+					<Link to="/xxxxx">Demo</Link>
+		3.展示区写Route标签进行路径的匹配
+					<Route path='/xxxx' component={Demo}/>
+		4.<App>的最外侧包裹了一个<BrowserRouter>或<HashRouter>
+```
+
+## 2.路由组件与一般组件区别
+```js
+		1.写法不同：
+					一般组件：<Demo/>
+					路由组件：<Route path="/demo" component={Demo}/>
+		2.存放位置不同：
+					一般组件：components
+					路由组件：pages
+		3.接收到的props不同：
+					一般组件：写组件标签时传递了什么，就能收到什么
+					路由组件：接收到三个固定的属性
+										history:
+													go: ƒ go(n)
+													goBack: ƒ goBack()
+													goForward: ƒ goForward()
+													push: ƒ push(path, state)
+													replace: ƒ replace(path, state)
+										location:
+													pathname: "/about"
+													search: ""
+													state: undefined
+										match:
+														params: {}
+														path: "/about"
+														url: "/about"
+```
+
+## 3.Link
+
+1. 作用: 修改URL，且不发送网络请求（路由链接）。
+2. 注意: 外侧需要用`<BrowserRouter>`或`<HashRouter>`包裹。
+
+```jsx
+import { Link } from "react-router-dom";
+
+function Test() {
+  return (
+    <div>
+    	<Link to="/路径">按钮</Link>
+    </div>
+  );
+}
+```
+
+## 4.NavLink
+
+作用: 与`<Link>`组件类似，且可实现导航的“高亮”效果。
+
+1.NavLink可以实现路由链接的高亮，通过activeClassName指定样式名
+
+```js
+   <NavLink activeClassName="atguigu"to="/about">About</NavLink>
+   <NavLink activeClassName="atguigu" to="/home">Home</NavLink>
+```
+
+
+
+```js
+// 注意: NavLink默认类名是active，下面是指定自定义的class
+
+//自定义样式
+// 这里的isActive是个boolean值，如果你激活了对应路由就会返回true
+<NavLink
+    to="login"
+    className={({ isActive }) => {
+        console.log('home', isActive)
+        return isActive ? 'list-group-item myActive' : 'list-group-item'
+    }}
+>login</NavLink>
+
+/*
+	默认情况下，当Home的子组件匹配成功，Home的导航也会高亮，
+	当NavLink上添加了end属性后，若Home的子组件匹配成功，则Home的导航没有高亮效果。
+	可以说没有用
+*/
+<NavLink to="home" end >home</NavLink>
+```
+
+我们可以把这个逻辑抽离出来
+
+```js
+function computeClassName({isActive}){
+    return isActive?"list-group-item myActive":"list-group-item";
+ }
+
+<NavLink className={computeClassName} to="/about">About</NavLink>
+<NavLink className={computeClassName} to="/home">Home</NavLink>
+```
+
+### 4.1 封装 NavLink
+
+```js
+封装：
+import React, { Component } from 'react'
+import { NavLink } from 'react-router-dom'
+
+export default class MyNavLink extends Component {
+    render() {
+        return (
+            <div>
+                {/* <NavLink activeClassName="atguigu" className="list-group-item" to={to}>{title}</NavLink> */}
+                <NavLink activeClassName="atguigu" className="list-group-item" {...this.props}></NavLink>
+
+            </div>
+        )
+    }
+}
+
+使用:
+              <MyNavLink to="/about">About</MyNavLink>
+              <MyNavLink to="/home" >Home</MyNavLink>
+```
+
+## Switch
+
+```js
+1.通常情况下，path和component是一一对应的关系。
+2.Switch可以提高路由匹配效率(单一匹配)。
+```
+
+```js
+  将路由用switch包裹着      
+    这样当匹配到第一个/home时  就不会继续往下去匹配了
+				<Switch>
+                  <Route path="/about" component={About} />
+                  <Route path="/home" component={Home} />
+                  <Route path="/home" component={Test} />
+                </Switch>
+```
+
+## 5.BrowserRouter和HashRouter
 
 在 React Router 中，最外层的 API 通常就是用 BrowserRouter。BrowserRouter 的内部实现是用了 `history` 这个库和 React Context 来实现的，所以当你的用户前进后退时，`history` 这个库会记住用户的历史记录，这样需要跳转时可以直接操作。
 
@@ -106,7 +277,7 @@ ReactDOM.render(
 
    
 
-## 3.Routes 与 Route
+## 6.Routes 与 Route
 
 1. v6版本中移出了先前的`<Switch>`，引入了新的替代者：`<Routes>`。
 2. `<Routes>` 和 `<Route>`要配合使用，且必须要用`<Routes>`包裹`<Route>`。
@@ -202,7 +373,7 @@ function App() {
 </Routes>
 ```
 
-## 4.React Router 实操案例
+## 7.React Router 实操案例
 
 首先我们建起几个页面
 
@@ -276,7 +447,7 @@ export default App;
 
 此时，当我们在浏览器中切换到 `/` 或 `/about` 或 `/dashboard` 时，就会显示对应的组件了。注意，在上面每个 `Route` 中，用 `element` 项将组件传下去，同时在 `path` 项中指定路径。在 `Route` 外，用 `Routes` 包裹起整路由列表。
 
-### 4.1 route组件的几种方式
+### 7.1 route组件的几种方式
 
 **1.component**
 
@@ -351,7 +522,7 @@ export default function App() {
 
 
 
-### 4.2获取route属性的方式
+### 7.2获取route属性的方式
 
 1.通过props传递
 
@@ -384,7 +555,7 @@ export default function Student(props) {
 
 
 
-## 5.如何设置默认页路径(如 404 页)
+## 8.如何设置默认页路径(如 404 页)
 
 在上文的路由列表 `Routes` 中，我们可以加入一个 `catch all` 的默认页面，比如用来作 404 页面。
 
@@ -608,60 +779,7 @@ export default function About() {
 
 
 
-## 6.Link
-
-1. 作用: 修改URL，且不发送网络请求（路由链接）。
-2. 注意: 外侧需要用`<BrowserRouter>`或`<HashRouter>`包裹。
-
-```jsx
-import { Link } from "react-router-dom";
-
-function Test() {
-  return (
-    <div>
-    	<Link to="/路径">按钮</Link>
-    </div>
-  );
-}
-```
-
-## 7.NavLink
-
-作用: 与`<Link>`组件类似，且可实现导航的“高亮”效果。
-
-```jsx
-// 注意: NavLink默认类名是active，下面是指定自定义的class
-
-//自定义样式
-// 这里的isActive是个boolean值，如果你激活了对应路由就会返回true
-<NavLink
-    to="login"
-    className={({ isActive }) => {
-        console.log('home', isActive)
-        return isActive ? 'list-group-item myActive' : 'list-group-item'
-    }}
->login</NavLink>
-
-/*
-	默认情况下，当Home的子组件匹配成功，Home的导航也会高亮，
-	当NavLink上添加了end属性后，若Home的子组件匹配成功，则Home的导航没有高亮效果。
-	可以说没有用
-*/
-<NavLink to="home" end >home</NavLink>
-```
-
-我们可以把这个逻辑抽离出来
-
-```jsx
-function computeClassName({isActive}){
-    return isActive?"list-group-item myActive":"list-group-item";
- }
-
-<NavLink className={computeClassName} to="/about">About</NavLink>
-<NavLink className={computeClassName} to="/home">Home</NavLink>
-```
-
-## 8.Navigate
+## 9.Navigate
 
 1. 作用：只要`<Navigate>`组件被渲染，就会修改路径，切换视图。
 2. `replace`属性用于控制跳转模式（push 或 replace，默认是push）。
@@ -702,9 +820,9 @@ export default function Home() {
 }
 ```
 
-## 9.使用useRoutes注册路由
+## 10.使用useRoutes注册路由
 
-### 9.1 使用useRoutes注册路由表-第一次改进
+### 10.1 使用useRoutes注册路由表-第一次改进
 
 ```
 useRoutes()
@@ -747,7 +865,7 @@ export default function App() {
 
 注意点：**`useRoutes([])`**，useRoutes根据路由表生成对应的路由规则。
 
-### 9.2 第二次改进
+### 10.2 第二次改进
 
 src文件夹下新建子文件夹：`routes`，`routes`下新建文件：`index.js` 路由表独立成js文件`：src/routes/index.js`
 
@@ -792,7 +910,7 @@ export default function App() {
 }
 ```
 
-## 10.嵌套路由的实现
+## 11.嵌套路由的实现
 
 路由结构如下：
 
@@ -895,9 +1013,9 @@ export default function Home() {
   - **`to="./news"`**，即相对路径
   - **`to="news"`**
 
-## 11.路由传递参数
+## 12.路由传递参数
 
-### 11.1 传递 params 参数
+### 12.1 传递 params 参数
 
 需求描述：点击“消息1”，显示其id、title和content。
 
@@ -1026,7 +1144,7 @@ export default function Detail() {
 
 ![image-20221027221736759](https://i0.hdslb.com/bfs/album/3d4eb676c19c7cf4962b27e7bfedff9da5afe804.png)image-20221027221736759
 
-### 11.2 传递 search 参数
+### 12.2 传递 search 参数
 
 演示的需求和上面`params`参数一样，所以只修改关键部分
 
@@ -1155,7 +1273,7 @@ export default function Detail() {
 1. 使用useSearchParams
 2. 使用useLocation
 
-### 11.3 传递 state 参数
+### 13.3 传递 state 参数
 
 演示的需求和上面``参数一样，所以只修改关键部分
 
@@ -1238,11 +1356,11 @@ export default function Detail() {
 >
 > 但是现在网站基本也没看过路径有个`#`，所以我们使用`BrowserRouter`就行了。
 
-## 12.编程式路由导航
+## 14.编程式路由导航
 
 案例还是和`11.路由传递参数`一样，只是换了种方式传参数
 
-### 12.1 编程式导航下，路由传递params参数
+### 14.1 编程式导航下，路由传递params参数
 
 ```
 pages/Message/index.jsx
@@ -1285,7 +1403,7 @@ export default function Message() {
 }
 ```
 
-### 12.2 编程式导航下，路由传递search参数
+### 14.2 编程式导航下，路由传递search参数
 
 ```
 pages/Message/index.jsx
@@ -1319,7 +1437,7 @@ export default function Message() {
 }
 ```
 
-### 12.3 编程式导航下，路由传递state参数
+### 14.3 编程式导航下，路由传递state参数
 
 ```
 pages/Message/index.jsx
@@ -1360,7 +1478,7 @@ export default function Message() {
 }
 ```
 
-### 12.4 withRouter的替换者
+### 14.4 withRouter的替换者
 
 这是5版本的时候
 
