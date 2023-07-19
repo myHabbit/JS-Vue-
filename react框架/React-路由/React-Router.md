@@ -195,9 +195,43 @@ export default class MyNavLink extends Component {
                 </Switch>
 ```
 
+## 解决多级路径刷新页面样式丢失的问题
+				1.public/index.html 中 引入样式时不写 ./ 写 / （常用）
+				2.public/index.html 中 引入样式时不写 ./ 写 %PUBLIC_URL% （常用）
+				3.使用HashRouter
+
+## 路由的严格匹配与模糊匹配
+				1.默认使用的是模糊匹配（简单记：【输入的路径】必须包含要【匹配的路径】，且顺序要一致）
+				2.开启严格匹配：<Route exact={true} path="/about" component={About}/>
+				3.严格匹配不要随便开启，需要再开，有些时候开启会导致无法继续匹配二级路由
+
+## Redirect的使用	
+
+**Redirect 重定向**
+
+				1.一般写在所有路由注册的最下方，当所有路由都无法匹配时，跳转到Redirect指定的路由
+				2.具体编码：
+						<Switch>
+							<Route path="/about" component={About}/>
+							<Route path="/home" component={Home}/>
+							<Redirect to="/about"/>
+						</Switch>
+
 ## 5.BrowserRouter和HashRouter
 
 在 React Router 中，最外层的 API 通常就是用 BrowserRouter。BrowserRouter 的内部实现是用了 `history` 这个库和 React Context 来实现的，所以当你的用户前进后退时，`history` 这个库会记住用户的历史记录，这样需要跳转时可以直接操作。
+
+**BrowserRouter与HashRouter的区别**
+			1.底层原理不一样：
+						BrowserRouter使用的是H5的history API，不兼容IE9及以下版本。
+						HashRouter使用的是URL的哈希值。
+			2.path表现形式不一样
+						BrowserRouter的路径中没有#,例如：localhost:3000/demo/test
+						HashRouter的路径包含#,例如：localhost:3000/#/demo/test
+			3.刷新后对路由state参数的影响
+						(1).BrowserRouter没有任何影响，因为state保存在history对象中。
+						(2).HashRouter刷新后会导致路由state参数的丢失！！！
+			4.备注：HashRouter可以用于解决一些路径错误相关的问题。
 
 BrowserRouter 使用时，通常用来包住其它需要路由的组件，所以通常会需要在你的应用的最外层用它，比如如下
 
@@ -372,6 +406,178 @@ function App() {
     </Route>
 </Routes>
 ```
+
+## push和replace
+
+```js
+开启replace  
+   不会留下痕迹
+ <Link replace to={{ pathname: '/home/message/detail', state: { id: mapObj.id, title: mapObj.title } }}>{mapObj.title}</Link>
+
+开启replace  
+   会留下痕迹
+ <Link push to={{ pathname: '/home/message/detail', state: { id: mapObj.id, title: mapObj.title } }}>{mapObj.title}</Link>
+
+```
+
+## 编程式路由导航（路由跳转）
+```js
+				借助this.prosp.history对象上的API对操作路由跳转、前进、后退
+						-this.prosp.history.push()  
+						-this.prosp.history.replace()
+						-this.prosp.history.goBack()   //后退
+						-this.prosp.history.goForward()  //前进
+						-this.prosp.history.go()
+
+history:
+			go: ƒ go(n)
+			goBack: ƒ goBack()
+			goForward: ƒ goForward()
+			push: ƒ push(path, state)
+			replace: ƒ replace(path, state)
+```
+
+**类式组件**
+
+```js
+import React, { Component } from 'react'
+import Detail from './Detail'
+import { Link, Route } from 'react-router-dom'
+
+export default class Message extends Component {
+    state = {
+        messageArr: [
+            {
+                id: '001',
+                title: '消息1'
+            },
+            {
+                id: '002',
+                title: '消息2'
+            },
+            {
+                id: '003',
+                title: '消息3'
+            },
+        ]
+    }
+
+    replaceShow = (id, title) => {
+        // replace跳转 携带params参数
+        // this.props.history.replace(`/home/message/detail/${id}/${title}`)
+
+        // replace跳转 携带search参数
+        // this.props.history.replace(`/home/message/detail/?id=${id}&title=${title}`)
+
+        // replace跳转 携带state参数
+        this.props.history.replace(`/home/message/detail`, { id, title })
+    }
+
+    pushShow = (id, title) => {
+        // push跳转 携带params参数
+        // this.props.history.push(`/home/message/detail/${id}/${title}`)
+
+
+        // replace跳转 携带search参数
+        // this.props.history.push(`/home/message/detail/?id=${id}&title=${title}`)
+
+
+        // replace跳转 携带state参数
+        this.props.history.push(`/home/message/detail`, { id, title })
+    }
+
+    go = () => {
+        this.props.history.go(2)
+    }
+
+    back = () => {
+        this.props.history.goBack()
+
+    }
+    forword = () => {
+        this.props.history.goForward()
+    }
+    render() {
+        const { messageArr } = this.state
+        return (
+            <div>
+                <ul>
+                    {
+                        messageArr.map(mapObj => {
+                            return (
+                                <li key={mapObj.id}>
+                                    {/* 携带params参数 */}
+                                    {/* <Link to={`/home/message/detail/${mapObj.id}/${mapObj.title}`}>{mapObj.title}</Link> */}
+
+
+                                    {/* 携带search参数 */}
+                                    {/* <Link to={`/home/message/detail/?id=${mapObj.id}&title=${mapObj.title}`}>{mapObj.title}</Link> */}
+
+                                    {/* 携带state参数 */}
+                                    <Link replace to={{ pathname: '/home/message/detail', state: { id: mapObj.id, title: mapObj.title } }}>{mapObj.title}</Link>
+                                    &nbsp;
+                                    <button onClick={() => { this.pushShow(mapObj.id, mapObj.title) }}>push查看</button>
+                                    &nbsp;
+                                    <button onClick={() => { this.replaceShow(mapObj.id, mapObj.title) }}>replace查看</button>
+
+                                </li>
+                            )
+
+                        })
+                    }
+                </ul>
+                <hr />
+                {/* 声明接受params参数 */}
+                {/* <Route path="/home/message/detail/:id/:title" component={Detail} ></Route> */}
+
+                {/* search无需声明接收，正常注册路由即可 */}
+                {/* <Route path="/home/message/detail" component={Detail} ></Route> */}
+
+                {/* state无需声明接收，正常注册路由即可 */}
+                <Route path="/home/message/detail" component={Detail} ></Route>
+
+
+                <button onClick={this.back}>回退</button>
+                <button onClick={this.forword}>前进</button>
+                <button onClick={this.go}>前进多位</button>
+            </div>
+        )
+    }
+}
+
+```
+
+## withRouter
+
+```js
+import React, { Component } from 'react'
+import { withRouter } from 'react-router-dom'
+
+
+class Header extends Component {
+    back = () => {
+        this.props.history.goBack()
+    }
+
+    render() {
+        return (
+            <div>
+                <div className="page-header">
+                    <h2>React Router Demo</h2>
+                    <button onClick={this.back}>回退</button>
+                </div>
+            </div>
+        )
+    }
+}
+
+export default withRouter(Header)
+
+// withRouter() 可以加工一般组件 让一般组件具备路由组件所特有的API
+// withRouter的返回值是一个新组件
+```
+
+
 
 ## 7.React Router 实操案例
 
@@ -1022,6 +1228,14 @@ export default function Home() {
 > pages下新建子文件夹：Detail，Detail下新建文件：index.jsx。pages/Detail/index.jsx即Detail组件。
 >
 > routes/index.js pages/Message/index.jsx，即Message组件 pages/Detail/index.jsx，即Detail组件
+>
+> ```js
+> {*/\* 声明接收params参数 \*/*}
+> 
+> <Route path="/home/message/detail/:id/:title" component={Detail} ></Route>
+> ```
+>
+> 
 
 ![371844431d4c4553a1fbfd9d01fb140a](https://i0.hdslb.com/bfs/album/cd93da0f0a1b8cb3c10a95316774424e8a90c2a3.gif)371844431d4c4553a1fbfd9d01fb140a
 
@@ -1070,6 +1284,8 @@ export default routes;
 
 `Message/index.jsx`（Message组件）
 
+**函数组件**
+
 ```jsx
 import React,{useState} from 'react'
 import { NavLink,Outlet } from 'react-router-dom'
@@ -1100,6 +1316,38 @@ export default function Message() {
         </div>
     )
 }
+```
+
+**类组件**
+
+```js
+import React, { Component } from 'react'
+
+const detailData = [
+    { id: '001', content: '你好,中国' },
+    { id: '002', content: '你好,尚硅谷' },
+    { id: '003', content: '你好,未来的自己' }
+]
+
+export default class Detail extends Component {
+    render() {
+        const MessageObj = this.props.match.params  //获取params传递的参数
+        const { id, title } = MessageObj
+        let obj = detailData.find(item => {
+            return item.id === id
+        })
+        return (
+            <div>
+                <ul>
+                    <li>id:{id}</li>
+                    <li>title:{title}</li>
+                    <li>content:{obj.content}</li>
+                </ul>
+            </div>
+        )
+    }
+}
+
 ```
 
 `Detail/index.jsx`（Detail组件）
@@ -1178,6 +1426,8 @@ export default routes;
 
 `Message/index.jsx`（Message组件）
 
+**函数式组件**
+
 ```jsx
 export default function Message() {
     return (
@@ -1198,6 +1448,41 @@ export default function Message() {
         </div>
     )
 }
+```
+
+**类式组件**
+
+```js
+import React, { Component } from 'react'
+import qs from 'querystring-es3'
+
+const detailData = [
+    { id: '001', content: '你好,中国' },
+    { id: '002', content: '你好,尚硅谷' },
+    { id: '003', content: '你好,未来的自己' }
+]
+
+export default class Detail extends Component {
+    render() {
+        // 接收search参数
+        const { search } = this.props.location
+        const obj = qs.parse(search.slice(1))
+
+        let detailObj = detailData.find(item => {
+            return item.id === obj.id
+        })
+        return (
+            <div>
+                <ul>
+                    <li>id:{detailObj.id}</li>
+                    <li>title:{obj.title}</li>
+                    <li>content:{detailObj.content}</li>
+                </ul>
+            </div>
+        )
+    }
+}
+
 ```
 
 `Detail/index.jsx`（Detail组件）
@@ -1335,6 +1620,8 @@ export default function Message() {
 
 `Detail/index.jsx`（Detail组件）
 
+**函数式组件**
+
 ```jsx
 import React from 'react'
 import { useLocation } from 'react-router-dom'
@@ -1352,11 +1639,56 @@ export default function Detail() {
 }
 ```
 
+**类式组件**
+
+```js
+传递：
+ 
+{/* 携带state参数 */}
+<Link to={{ pathname: '/home/message/detail',state:{id:mapObj.id,title:mapObj.title} }}>{mapObj.title}</Link>
+
+
+接收：
+import React, { Component } from 'react'
+// import qs from 'querystring-es3'
+
+const detailData = [
+    { id: '001', content: '你好,中国' },
+    { id: '002', content: '你好,尚硅谷' },
+    { id: '003', content: '你好,未来的自己' }
+]
+
+export default class Detail extends Component {
+    render() {
+
+        // 接收state参数
+
+        const { id, title } = this.props.location.state
+
+        let detailObj = detailData.find(item => {
+            return item.id === id
+        })
+
+        return (
+            <div>
+                <ul>
+                    <li>id:{id}</li>
+                    <li>title:{title}</li>
+                    <li>content:{detailObj.content}</li>
+                </ul>
+            </div>
+        )
+    }
+}
+```
+
+
+
 > **刷新页面后对路由state参数的影响** 在以前版本中，BrowserRouter没有任何影响，因为state保存在history对象中；HashRouter刷新后会导致路由state参数的丢失 但在V6版本中，HashRouter在页面刷新后不会导致路由state参数的丢失
 >
 > 但是现在网站基本也没看过路径有个`#`，所以我们使用`BrowserRouter`就行了。
 
-## 14.编程式路由导航
+## 14.编程式路由导航（参数）
 
 案例还是和`11.路由传递参数`一样，只是换了种方式传参数
 
